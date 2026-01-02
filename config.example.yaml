@@ -1,0 +1,28 @@
+server:
+  host: "0.0.0.0"
+  port: 8000
+
+security:
+  api_key: "REPLACE_WITH_YOUR_GATEWAY_KEY"
+
+scriberr:
+  base_url: "https://scriberr.url"
+  api_key: "REPLACE_WITH_YOUR_SCRIBERR_KEY"
+
+apprise:
+  url: "mailto://user:pass@example.com"
+  tag: "scriberr"
+
+processing:
+  poll_interval_seconds: 10
+  poll_timeout_seconds: 900
+  status_complete_values:
+    - "completed"
+    - "complete"
+    - "done"
+    - "finished"
+    - "succeeded"
+  status_failed_values:
+    - "failed"
+    - "error"
+    - "canceled"

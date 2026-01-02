@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Scriberr Gateway",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "uvicorn",
+      "args": [
+        "scriberr_gateway.server:app",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8932",
+        "--reload"
+      ],
+      "env": {
+        "SCRIBERR_GATEWAY_CONFIG": "${workspaceFolder}/config.yaml"
+      }
+    },
+    {
+      "name": "Test notifications",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "scriberr_gateway.sandbox",
+    }
+
+  ]
+}
