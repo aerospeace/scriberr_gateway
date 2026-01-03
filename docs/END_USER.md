@@ -5,7 +5,7 @@ This service accepts file uploads over HTTP, forwards them to your Scriberr inst
 
 ## Prerequisites
 - A Scriberr instance reachable at your URL
-- A Scriberr API key.
+- A Scriberr username and password.
 - An Apprise notification URL (email, Discord, Slack, etc.).
 
 ## Configuration
@@ -16,7 +16,9 @@ This service accepts file uploads over HTTP, forwards them to your Scriberr inst
 2. Edit `config.yaml`:
    - `security.api_key`: the API key that clients must provide when calling `/upload`.
    - `scriberr.base_url`: base URL of your Scriberr instance.
-   - `scriberr.api_key`: Scriberr API key.
+   - `scriberr.username`: Scriberr username.
+   - `scriberr.password`: Scriberr password.
+   - `scriberr.token_cache_minutes`: number of minutes to cache the Scriberr JWT in memory.
    - `apprise.url`: Apprise target URL.
    - Optional `apprise.tag`: tag for Apprise notifications.
 

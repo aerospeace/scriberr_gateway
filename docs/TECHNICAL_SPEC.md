@@ -18,10 +18,12 @@ Simple liveness check.
 
 ## Background Workflow
 1. Extract `id` from the upload response (also checks `query_id`, `request_id`, `run_id`).
-2. `POST {base_url}/api/v1/run` with `{ "id": <query_id> }`.
-3. Poll `GET {base_url}/api/v1/run/{run_id}` until the `status` (or `state`) matches a completion value from `processing.status_complete_values`.
-4. If the status does not contain text, fetch `GET {base_url}/api/v1/run/{run_id}/text`.
-5. Send the text via Apprise.
+2. If no cached JWT exists or it is too old, `POST {base_url}/api/v1/auth/login` with `{ "username": "...", "password": "..." }`.
+3. Uploads and follow-up calls use `Authorization: Bearer <token>`.
+4. `POST {base_url}/api/v1/transcription/{query_id}/start`.
+5. Poll `GET {base_url}/api/v1/transcription/{run_id}` until the `status` (or `state`) matches a completion value from `processing.status_complete_values`.
+6. If the status does not contain text, fetch `GET {base_url}/api/v1/transcription/{run_id}/transcript`.
+7. Send the text via Apprise.
 
 ## Configuration
 Configuration is loaded from `config.yaml` or `SCRIBERR_GATEWAY_CONFIG`.
@@ -34,7 +36,9 @@ security:
   api_key: "..."
 scriberr:
   base_url: "..."
-  api_key: "..."
+  username: "..."
+  password: "..."
+  token_cache_minutes: 30
 apprise:
   url: "mailto://user:pass@example.com"
   tag: "scriberr"  # optional
