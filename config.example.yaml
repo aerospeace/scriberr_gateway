@@ -7,7 +7,9 @@ security:
 
 scriberr:
   base_url: "https://scriberr.url"
-  api_key: "REPLACE_WITH_YOUR_SCRIBERR_KEY"
+  username: "REPLACE_WITH_YOUR_USERNAME"
+  password: "REPLACE_WITH_YOUR_PASSWORD"
+  token_cache_minutes: 30
 
 apprise:
   url: "mailto://user:pass@example.com"

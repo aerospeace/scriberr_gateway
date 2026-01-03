@@ -21,7 +21,9 @@ class SecurityConfig:
 @dataclass
 class ScriberrConfig:
     base_url: str
-    api_key: str
+    username: str
+    password: str
+    token_cache_minutes: int
 
 
 @dataclass
@@ -103,10 +105,16 @@ def load_config(path: str | Path = DEFAULT_CONFIG_PATH) -> AppConfig:
     scriberr_data = _ensure_section(raw, "scriberr")
     scriberr = ScriberrConfig(
         base_url=str(scriberr_data.get("base_url", "")).strip().rstrip("/"),
-        api_key=str(scriberr_data.get("api_key", "")).strip(),
+        username=str(scriberr_data.get("username", "")).strip(),
+        password=str(scriberr_data.get("password", "")).strip(),
+        token_cache_minutes=int(scriberr_data.get("token_cache_minutes", 0)),
     )
-    if not scriberr.base_url or not scriberr.api_key:
-        raise ConfigError("scriberr.base_url and scriberr.api_key are required")
+    if not scriberr.base_url or not scriberr.username or not scriberr.password:
+        raise ConfigError(
+            "scriberr.base_url, scriberr.username, and scriberr.password are required"
+        )
+    if scriberr.token_cache_minutes <= 0:
+        raise ConfigError("scriberr.token_cache_minutes must be a positive integer")
 
     apprise_data = _ensure_section(raw, "apprise")
     apprise = AppriseConfig(

@@ -15,7 +15,7 @@ logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(mess
 
 CONFIG_PATH_ENV = "SCRIBERR_GATEWAY_CONFIG"
 
-app = FastAPI(title="Scriberr Gateway", version="0.1.0")
+app = FastAPI(title="Scriberr Gateway", version="0.2.0")
 
 _config: AppConfig | None = None
 
@@ -102,6 +102,9 @@ async def upload(
     try:
         upload_response = upload_file(config.scriberr, file_bytes, file.filename)
     except ScriberrError as exc:
+        if exc.status_code:
+            detail = exc.payload if exc.payload is not None else str(exc)
+            raise HTTPException(status_code=exc.status_code, detail=detail) from exc
         raise HTTPException(status_code=502, detail=str(exc)) from exc
     except Exception as exc:
         logger.exception("Upload to Scriberr failed")
