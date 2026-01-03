@@ -48,32 +48,31 @@ def _extract_id(payload: dict[str, Any]) -> str | None:
     return None
 
 
-def _process_run(config: AppConfig, query_id: str) -> None:
+def _process_run(config: AppConfig, id: str) -> None:
     try:
-        run_response = trigger_run(config.scriberr, query_id)
-        run_id = _extract_id(run_response) or query_id
-
-        status_response = poll_run(config.scriberr, config.processing, run_id)
+        # Should not be needed any if user had setup automating running on upload
+        # run_response = trigger_run(config.scriberr, query_id)
+        status_response = poll_run(config.scriberr, config.processing, id)
         text = status_response.get("text")
-        text = fetch_text(config.scriberr, run_id)
+        text = fetch_text(config.scriberr, id)
         
         send_notification(
             config.apprise,
-            title=f"Scriberr run {run_id} completed",
+            title=f"Scriberr run {id} completed",
             body=text,
         )
     except ScriberrError as exc:
         logger.error("Scriberr processing failed: %s", exc)
         send_notification(
             config.apprise,
-            title="Scriberr run failed",
+            title=f"Scriberr run {id} failed",
             body=str(exc),
         )
     except Exception as exc:
         logger.exception("Unexpected error during background processing")
         send_notification(
             config.apprise,
-            title="Scriberr run failed",
+            title=f"Scriberr run {id} failed",
             body=str(exc),
         )
 
